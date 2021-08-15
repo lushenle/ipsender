@@ -1,0 +1,10 @@
+---
+version: '3.2'
+services:
+  sendmail:
+    container_name: sendmail
+    image: manunkind/sendmail:v1.0
+    volumes:
+      - ${PWD}/config.json:/config.json
+    environment:
+      MAIL_CONFIG: /config.json
