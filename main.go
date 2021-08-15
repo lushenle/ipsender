@@ -25,7 +25,10 @@ type ConfigJSON struct {
 	Interval     int    `json:"interval"`
 }
 
-var Config ConfigJSON
+var (
+	Config ConfigJSON
+	lastIP = "1.2.3.4"
+)
 
 func parseConfig() {
 	conf := os.Getenv("MAIL_CONFIG")
@@ -80,11 +83,8 @@ func sendMail() error {
 	if err := d.DialAndSend(m); err != nil {
 		return err
 	}
-	time.Sleep(time.Duration(Config.Interval) * time.Second)
 	return nil
 }
-
-var lastIP = "1.2.3.4"
 
 func main() {
 	parseConfig()
@@ -96,6 +96,7 @@ func main() {
 			sendMail()
 			log.Printf("IP send successfully: %v\n", getIP())
 			lastIP = getIP()
+			time.Sleep(time.Duration(Config.Interval) * time.Second)
 		}
 	}
 }

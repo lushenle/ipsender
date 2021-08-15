@@ -1,4 +1,4 @@
-module github.com/lushenle/senmail
+module github.com/lushenle/sendip
 
 go 1.16
 
