@@ -52,7 +52,7 @@ func parseConfig() {
 func httpGet(url string) string {
 	res, err := http.Get(url)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Tool web get faild: %v\n", err)
 	}
 	defer res.Body.Close()
 	content, err := ioutil.ReadAll(res.Body)
