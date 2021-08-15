@@ -46,11 +46,11 @@ spec:
           imagePullPolicy: IfNotPresent
           resources:
             requests:
-              memory: "32Mi"
-              cpu: "50m"
+              memory: "16Mi"
+              cpu: "5m"
             limits:
-              memory: "64Mi"
-              cpu: "100m"
+              memory: "32Mi"
+              cpu: "10m"
           volumeMounts:
             - name: config
               mountPath: /opt/config
