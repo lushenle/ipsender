@@ -1,15 +1,36 @@
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+data:
+  config.json: |
+    {
+        "from": "admin@idocker.io",
+        "to": "lushenle@gmail.com",
+        "password": "YOUR_PASSWD",
+        "smtp_username": "postmaster@mg.idocker.io",
+        "smtp_host": "smtp.mailgun.org",
+        "smtp_port": 25,
+        "subject": "Home IP",
+        "interval": 10
+    }
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ipsender
 spec:
   replicas: 1
-  minReadySeconds: 1 # Wait 5 seconds after each new pod comes up before marked as "ready"
+  # Wait 5 seconds after each new pod comes up before marked as "ready"
+  minReadySeconds: 1
   strategy:
-    type: RollingUpdate # describe how we do rolling updates
+    # describe how we do rolling updates
+    type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: 1 # When updating take one pod down at a time
+      # When updating take one pod down at a time
+      maxUnavailable: 1
       maxSurge: 1
   selector:
     matchLabels:
@@ -20,13 +41,27 @@ spec:
         name: ipsender
     spec:
       containers:
-      - name: ipsender
-        image: manunkind/ipsender:v1.0
-        imagePullPolicy: IfNotPresent
-        resources:
-          requests:
-            memory: "32Mi"
-            cpu: "50m"
-          limits:
-            memory: "64Mi"
-            cpu: "100m"
+        - name: ipsender
+          image: manunkind/ipsender:v1.0
+          imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "50m"
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
+          volumeMounts:
+            - name: config
+              mountPath: /opt/config
+              readOnly: true
+          env:
+            - name: MAIL_CONFIG
+              value: /opt/config/config.json
+      volumes:
+        - name: config
+          configMap:
+            name: config
+            items:
+              - key: config.json
+                path: config.json
