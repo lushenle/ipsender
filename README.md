@@ -29,10 +29,10 @@ Get public IP from `https://ip.tool.lu`, then send it to someone via email
 
 ```bash
 # docker
-docker run --name sendip -d \
+docker run --name ipsender -d \
   -v ${PWD}/config.json:/config.json \
   --restart=always \
-  manunkind/sendip:v1.0
+  manunkind/ipsender:v1.0
 # k8s
 kubectl apply -f k8s.yaml
 # docker-compose

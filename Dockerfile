@@ -2,7 +2,7 @@
 FROM golang:1.16-buster as builder
 ENV GO11MODULE=on
 ENV GOPROXY=https://goproxy.cn,direct
-WORKDIR $GOPATH/src/github.com/lushenle/sendip
+WORKDIR $GOPATH/src/github.com/lushenle/ipsender
 COPY . .
 
 RUN make
@@ -10,7 +10,7 @@ RUN make
 # stage 2: use alpine as base image
 FROM alpine:3.10
 LABEL maintainer="Shnele Lu <lushenle@gmail.com>" \
-    app=sendip \
+    app=ipsender \
     version=v1.0
 
 RUN apk update && \
@@ -19,6 +19,6 @@ RUN apk update && \
     apk del tzdata && \
     rm -rf /var/cache/apk/*
 
-COPY --from=builder /go/src/github.com/lushenle/sendip/app /
+COPY --from=builder /go/src/github.com/lushenle/ipsender/app /
 ENV MAIL_CONFIG=/config.json
 CMD ["/app"]

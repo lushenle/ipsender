@@ -1,4 +1,4 @@
-module github.com/lushenle/sendip
+module github.com/lushenle/ipsender
 
 go 1.16
 

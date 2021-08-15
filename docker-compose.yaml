@@ -1,9 +1,9 @@
 ---
 version: '3.2'
 services:
-  sendip:
-    container_name: sendip
-    image: manunkind/sendip:v1.0
+  ipsender:
+    container_name: ipsender
+    image: manunkind/ipsender:v1.0
     volumes:
       - ${PWD}/config.json:/config.json
     environment:
