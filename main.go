@@ -37,7 +37,7 @@ func parseConfig() {
 	}
 	file, err := os.Open(conf)
 	if err != nil {
-		log.Fatalf("Read config fiel err: %v\n", err)
+		log.Fatalf("Read config file err: %v\n", err)
 	}
 
 	j := json.NewDecoder(file)
@@ -64,7 +64,7 @@ func httpGet(url string) string {
 
 func getIP() string {
 	ctx := httpGet("https://ip.tool.lu/")
-	reg := regexp.MustCompile(`(\d+)\.(\d+).(\d+).(\d+)`)
+	reg := regexp.MustCompile(`(\d+)\.(\d+)\.(\d+)\.(\d+)`)
 	ips := reg.FindStringSubmatch(ctx)
 	for _, ip := range ips {
 		return ip
@@ -89,13 +89,14 @@ func sendMail() error {
 func main() {
 	parseConfig()
 	for {
-		if strings.EqualFold(lastIP, getIP()) {
-			log.Printf("IP has not changed: %v\n", getIP())
+		currentIP := getIP()
+		if strings.EqualFold(lastIP, currentIP) {
+			log.Printf("IP has not changed: %v\n", currentIP)
 			time.Sleep(time.Duration(Config.Interval) * time.Second)
 		} else {
 			sendMail()
-			log.Printf("IP send successfully: %v\n", getIP())
-			lastIP = getIP()
+			log.Printf("IP send successfully: %v\n", currentIP)
+			lastIP = currentIP
 			time.Sleep(time.Duration(Config.Interval) * time.Second)
 		}
 	}
